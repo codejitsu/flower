@@ -8,13 +8,19 @@ object ProjectBuild extends Build {
     id = "root",
     base = file("."),
     settings = parentSettings,
-    aggregate = Seq(flowerCore)
+    aggregate = Seq(flowerCore, flowerAppender)
   )
 
   lazy val flowerCore = Project(
     id = "flower-core",
     base = file("./modules/flower-core"),
     settings = defaultSettings ++ Seq(libraryDependencies ++= Dependencies.flowerCore)
+  )
+
+  lazy val flowerAppender = Project(
+    id = "flower-appender",
+    base = file("./modules/flower-appender"),
+    settings = defaultSettings ++ Seq(libraryDependencies ++= Dependencies.flowerAppender)
   )
 }
 
@@ -41,4 +47,5 @@ object Dependencies {
   /** Module deps */
 
   val flowerCore = Seq(config) ++ test
+  val flowerAppender = Seq(config) ++ test
 }
