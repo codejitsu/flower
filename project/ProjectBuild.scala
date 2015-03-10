@@ -8,7 +8,7 @@ object ProjectBuild extends Build {
     id = "root",
     base = file("."),
     settings = parentSettings,
-    aggregate = Seq(flowerCore, flowerAppender)
+    aggregate = Seq(flowerCore, flowerLogback)
   )
 
   lazy val flowerCore = Project(
@@ -17,10 +17,16 @@ object ProjectBuild extends Build {
     settings = defaultSettings ++ Seq(libraryDependencies ++= Dependencies.flowerCore)
   )
 
-  lazy val flowerAppender = Project(
-    id = "flower-appender",
-    base = file("./modules/flower-appender"),
-    settings = defaultSettings ++ Seq(libraryDependencies ++= Dependencies.flowerAppender)
+  lazy val flowerLogback = Project(
+    id = "flower-logback",
+    base = file("./modules/flower-logback"),
+    settings = defaultSettings ++ Seq(libraryDependencies ++= Dependencies.flowerLogback)
+  )
+
+  lazy val flowerDemo = Project(
+    id = "flower-demo",
+    base = file("./modules/flower-demo"),
+    settings = defaultSettings ++ Seq(libraryDependencies ++= Dependencies.flowerDemo)
   )
 }
 
@@ -29,6 +35,7 @@ object Dependencies {
 
   object Compile {
     val config        = "com.typesafe"             % "config"           % TypesafeConfigVer
+    val logback       = "ch.qos.logback"           % "logback-classic"  % LogbackVer
   }
 
   object Test {
@@ -41,11 +48,13 @@ object Dependencies {
   }
 
   import Compile._
+  import Test._
 
   val test = Seq(Test.scalatest, Test.scalacheck, Test.junit)
 
   /** Module deps */
 
   val flowerCore = Seq(config) ++ test
-  val flowerAppender = Seq(config) ++ test
+  val flowerLogback = Seq(logback, junit)
+  val flowerDemo = Seq(config) ++ test
 }
